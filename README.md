@@ -10,6 +10,8 @@ To create a new campagin with prizes that have different probabilites for end us
 
 # API documentation
 
+To view detail documentation on API endpoint. [Click here to view swagger](https://leuhk.github.io/LuckyDrawSystem/)
+
 # Get Started
 
 ## Installation
