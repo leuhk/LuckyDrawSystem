@@ -1,0 +1,238 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Lucky Draw System API documentation",
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "campagin",
+      "description": "use to generate new capagin and perform lucky draw"
+    }
+  ],
+  "paths": {
+    "/campagin/create": {
+      "post": {
+        "tags": ["campagin"],
+        "summary": "Create a new campagin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCampaginBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Succesfully create a new campagin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCampaginBodyResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to generate new campagin",
+            "content": {}
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/campagin/add-prizes": {
+      "patch": {
+        "tags": ["campagin"],
+        "summary": "Add prizes to campagin",
+        "description": "Please note:\n  - probability must add up to 100%\n  - must have one default prize",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddPrizeBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully update prize to campagin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePrizeResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to update campagin",
+            "content": {}
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/campagin/draw": {
+      "post": {
+        "tags": ["campagin"],
+        "summary": "Draw prize from campagin",
+        "description": "Please note:\n  - User that already draw today will be rejected",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DrawPrizeBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully update prize to campagin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrawPrizeResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to update campagin",
+            "content": {}
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateCampaginBody": {
+        "required": ["start", "end", "name"],
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string",
+            "example": "2020-01-03"
+          },
+          "end": {
+            "type": "string",
+            "example": "2022-01-01"
+          },
+          "name": {
+            "type": "string",
+            "example": "new Campagin"
+          }
+        }
+      },
+      "CreateCampaginBodyResponse": {
+        "type": "object",
+        "properties": {
+          "campagin_number": {
+            "type": "number",
+            "example": 612345
+          }
+        }
+      },
+      "UpdatePrizeResponse": {
+        "type": "object",
+        "properties": {
+          "msg": {
+            "type": "string",
+            "example": "prize added successfully"
+          }
+        }
+      },
+      "AddPrizeBody": {
+        "required": ["campaginNumber"],
+        "type": "object",
+        "properties": {
+          "campaginNumber": {
+            "type": "number",
+            "example": 123456
+          },
+          "prize": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "$5 coupon"
+                },
+                "unlimited": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "dailyQuota": {
+                  "type": "number",
+                  "example": 100
+                },
+                "totalQuota": {
+                  "type": "number",
+                  "example": 200
+                },
+                "probability": {
+                  "type": "number",
+                  "example": 50
+                },
+                "default": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "DrawPrizeBody": {
+        "type": "object",
+        "properties": {
+          "campagin_number": {
+            "type": "number",
+            "example": 612345
+          },
+          "mobile": {
+            "type": "string",
+            "example": "92221133"
+          }
+        }
+      },
+      "DrawPrizeResponse": {
+        "type": "object",
+        "properties": {
+          "drawing_result": {
+            "type": "string",
+            "example": "$50 coupon"
+          }
+        }
+      }
+    }
+  }
+}
